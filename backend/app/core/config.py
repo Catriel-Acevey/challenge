@@ -3,7 +3,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Mi API Backend"
     
-    # Variables de PostgreSQL
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_SERVER: str = "localhost"
@@ -17,7 +16,6 @@ class Settings(BaseSettings):
         """
         return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
-    # Carga automática del archivo .env
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
 

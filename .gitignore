@@ -1,0 +1,27 @@
+# Python bytecode (archivos compilados)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+ENV/
+
+# Variables de entorno (¡NUNCA subir contraseñas/secrets!)
+.env
+*.env
+
+# Carpetas de IDEs/Editores
+.vscode/
+.idea/
+
+# Base de datos local (por si usás SQLite o archivos de BD locales)
+*.sqlite3
+*.db
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db

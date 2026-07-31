@@ -1,51 +1,48 @@
-from typing import Optional
+from typing import List, Optional
+from sqlalchemy.orm import Session
+from app.models.user import User
+from app.schemas.user import UserCreate, UserUpdate
+
 
 class UserRepository:
-    def __init__(self):
-        self._db = []
-        self._auto_increment_id = 1
 
-    def get_all(self) -> list[dict]:
-        """ get all users from the database """
-        return self._db
-    
-    def get_by_id(self, id: int) -> Optional[dict]:
-        """ find a user by their id """
-        for user in self._db:
-            if user["id"] == id:
-                return user
-        return None
+    def get_by_id(self, db: Session, user_id: int) -> Optional[User]:
+        """Fetch a single user by their primary key ID."""
+        return db.query(User).filter(User.id == user_id).first()
 
-    def get_by_email(self, email: str) -> Optional[dict]:
-        """Find a user by their email address."""
-        for user in self._db:
-            if user["email"] == email:
-                return user
-        return None
+    def get_by_email(self, db: Session, email: str) -> Optional[User]:
+        """Fetch a user by their email address."""
+        return db.query(User).filter(User.email == email).first()
 
-    def create(self, user_data: dict) -> dict:
-        """Create and save a new user in the database."""
-        new_user = {
-            "id": self._auto_increment_id,
-            "email": user_data["email"],
-            "username": user_data["username"],
-            "password": user_data["password"],
-            "is_active": True
-        }
-        self._db.append(new_user)
-        self._auto_increment_id += 1
-        return new_user
+    def get_all(self, db: Session, skip: int = 0, limit: int = 100) -> List[User]:
+        """Retrieve a list of users with pagination parameters."""
+        return db.query(User).offset(skip).limit(limit).all()
 
-    def update(self, id: str, user_data: dict) -> Optional[dict]:
-        """ update a user in the database """
-        if self.get_by_id(id) is None:
-            return None
-        self._db[id] = user_data
-    
-    def delete(self, id: str) -> bool:
-        """ delete a user from the database """
-        user = self.get_by_id(id)
-        if user is None:
-            return False
-        self._db.remove(user)
-        return True
+    def create(self, db: Session, user_data: UserCreate) -> User:
+        """Create and persist a new user in the database."""
+        db_user = User(
+            email=user_data.email,
+            username=user_data.username,
+            password=user_data.password,
+        )
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+
+    def update(self, db: Session, db_user: User, user_data: UserUpdate) -> User:
+        """Update an existing user's details."""
+        update_data = user_data.model_dump(exclude_unset=True)
+
+        for key, value in update_data.items():
+            setattr(db_user, key, value)
+
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+
+    def delete(self, db: Session, db_user: User) -> None:
+        """Delete a user from the database."""
+        db.delete(db_user)
+        db.commit()
