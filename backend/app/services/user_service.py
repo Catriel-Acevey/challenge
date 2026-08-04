@@ -39,7 +39,7 @@ class UserService:
     def update_user(self, db: Session, user_id: int, user_in: UserUpdate) -> User:
         """Updates an existing user or raises 404."""
         db_user = self.get_user_by_id(db=db, user_id=user_id)
-        return self.user_repo.update(db=db, db_user=db_user, user_in=user_in)
+        return self.user_repo.update(db=db, db_user=db_user, user_data=user_in)
 
     def delete_user(self, db: Session, user_id: int) -> None:
         """Deletes a user by ID or raises 404 if not found."""

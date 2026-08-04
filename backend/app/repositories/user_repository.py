@@ -24,6 +24,7 @@ class UserRepository:
             email=user_data.email,
             username=user_data.username,
             password=user_data.password,
+            pokemon_team=user_data.pokemon_team
         )
         db.add(db_user)
         db.commit()
