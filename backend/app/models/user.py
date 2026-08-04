@@ -1,3 +1,4 @@
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy import Column, Integer, String, Boolean
 from app.db.base import Base
 
@@ -11,4 +12,5 @@ class User(Base):
     email = Column(String(255), unique=True, index=True, nullable=False)
     username = Column(String(50), nullable=False)
     password = Column(String(255), nullable=False)
+    pokemon_team = Column(ARRAY(Integer), default=[], nullable=True)
     is_active = Column(Boolean, default=True)

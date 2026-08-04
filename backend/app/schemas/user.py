@@ -1,10 +1,11 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, EmailStr
 
 # Base schema with shared attributes
 class UserBase(BaseModel):
     email: EmailStr
     username: str
+    pokemon_team: Optional[List[int]] = None
 
 # Schema for creating a user (Input)
 class UserCreate(UserBase):
@@ -14,6 +15,7 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     username: Optional[str] = None
+    pokemon_team: Optional[List[int]] = None
     password: Optional[str] = None
 
 # Schema for returning user data (Output)

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from app.db.session import get_db
-from app.schemas.user import UserCreate, UserResponse
+from app.schemas.user import UserCreate, UserResponse, UserUpdate
 from app.services.user_service import UserService
 from app.repositories.user_repository import UserRepository
 
@@ -32,6 +32,13 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
     Register a new user.
     """
     return user_service.create_user(user_in=user_in, db=db)
+
+@router.put("/{user_id}", response_model=UserResponse)
+def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db)):
+    """
+    Update a user by Id.
+    """
+    return user_service.update_user(user_id=user_id, user_in=user_in, db=db)
 
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(user_id: int, db: Session = Depends(get_db)):
