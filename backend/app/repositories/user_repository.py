@@ -34,6 +34,8 @@ class UserRepository:
     def update(self, db: Session, db_user: User, user_data: UserUpdate) -> User:
         """Update an existing user's details."""
         update_data = user_data.model_dump(exclude_unset=True)
+        
+        print(f"updating user: {update_data.items()}")
 
         for key, value in update_data.items():
             setattr(db_user, key, value)

@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     POSTGRES_SERVER: str = "localhost"
     POSTGRES_PORT: int = 5432
     POSTGRES_DB: str
+    
+    POKEAPI_BASE_URL: str
 
     @property
     def DATABASE_URL(self) -> str:

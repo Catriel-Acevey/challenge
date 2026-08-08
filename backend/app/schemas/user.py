@@ -1,5 +1,5 @@
 from typing import Optional, List
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 # Base schema with shared attributes
 class UserBase(BaseModel):
@@ -22,6 +22,7 @@ class UserUpdate(BaseModel):
 class UserResponse(UserBase):
     id: int
     is_active: bool
+    pokemon_team: List[str] = Field(default_factory=list)
 
     class Config:
         from_attributes = True
