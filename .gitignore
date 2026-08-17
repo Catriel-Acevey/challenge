@@ -12,6 +12,7 @@ ENV/
 
 # Variables de entorno (¡NUNCA subir contraseñas/secrets!)
 .env
+.env.test
 *.env
 
 # Carpetas de IDEs/Editores
