@@ -76,6 +76,11 @@ class UserService:
     async def update_user(self, db: Session, user_id: int, user_in: UserUpdate) -> User:
         """Updates an existing user or raises 404."""
         db_user = self.user_repo.get_by_id(db=db, user_id=user_id)
+        if not db_user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found"
+            )
         user = self.user_repo.update(db=db, db_user=db_user, user_data=user_in)
         enriched_pokemon_names = await self.poke_client.get_pokemon_names_by_ids(
             user.pokemon_team or []
