@@ -28,9 +28,15 @@ jobs:
       - checkout
       
       # Install Python dependencies
-      - python/install-packages:
-          pkg-manager: pip
-          app-dir: ./backend # Check this path if requirements.txt is in the root
+      # - python/install-packages:
+      #     pkg-manager: pip
+      #     app-dir: ./backend # Check this path if requirements.txt is in the root
+
+      - run:
+          name: Install dependencies
+          command: |
+            python -m pip install --upgrade pip
+            pip install -r backend/requirements.txt -r backend/requirements.test.txt
 
       # Wait for the database to accept connections before running tests
       - run:
