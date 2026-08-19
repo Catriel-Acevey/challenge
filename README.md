@@ -4,6 +4,10 @@ REST microservice for managing users and their Pokemon teams. The API is built
 with FastAPI, PostgreSQL, and SQLAlchemy, and queries PokeAPI to convert stored
 Pokemon IDs into their names.
 
+### Badges
+
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Catriel-Acevey/challenge/tree/main.svg?style=svg&circle-token=CCIPRJ_9UrnbzcCuCPF5E1gScbh2_cec392f81abd6a9ae9c8379a55d4422ab0c4c0df)](https://dl.circleci.com/status-badge/redirect/gh/Catriel-Acevey/challenge/tree/main)
+
 ## Features
 
 - Create users with an email, username, password, and an optional Pokemon team.
