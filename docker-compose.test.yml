@@ -4,40 +4,34 @@ services:
   # Base de Datos
   db:
     image: postgres:15-alpine
-    container_name: challenge_postgres
+    container_name: challenge_postgres_test
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespassword
-      POSTGRES_DB: challenge_db
+      POSTGRES_DB: challenge_db_test
     ports:
       - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_test:/var/lib/postgresql/data
 
   backend:
     depends_on:
       - db
-    container_name: challenge_backend
-    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    container_name: challenge_backend_test
+    command: ["pytest", "-v", "--cache-clear"]
     build:
       context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
+      dockerfile: Dockerfile.test
+    # ports:
+    #   - "8000:8000"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgrespassword
       - POSTGRES_SERVER=db
       - POSTGRES_PORT=5432
-      - POSTGRES_DB=challenge_db
+      - POSTGRES_DB=challenge_db_test
       - POKEAPI_BASE_URL=https://pokeapi.co/api/v2/pokemon
 
-  # Futuro servicio de Frontend (opcional a futuro)
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "3000:3000"
-
 volumes:
-  postgres_data:
+  postgres_data_test:
