@@ -8,6 +8,8 @@ Pokemon IDs into their names.
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/Catriel-Acevey/challenge/tree/main.svg?style=svg&circle-token=CCIPRJ_9UrnbzcCuCPF5E1gScbh2_cec392f81abd6a9ae9c8379a55d4422ab0c4c0df)](https://dl.circleci.com/status-badge/redirect/gh/Catriel-Acevey/challenge/tree/main)
 
+[![Coverage Status](https://coveralls.io/repos/github/Catriel-Acevey/challenge/badge.svg?branch=main)](https://coveralls.io/github/Catriel-Acevey/challenge?branch=main)
+
 ## Features
 
 - Create users with an email, username, password, and an optional Pokemon team.
