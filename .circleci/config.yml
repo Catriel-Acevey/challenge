@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   python: circleci/python@2.0.3
-  # coveralls: coveralls/coveralls@2.2.5 # Temporarily commented out
+  coveralls: coveralls/coveralls@2.2.5
 
 jobs:
   build_and_test:
@@ -16,7 +16,7 @@ jobs:
           POSTGRES_PASSWORD: postgrespassword
           POSTGRES_DB: challenge_db_test
           POKEAPI_BASE_URL: https://pokeapi.co/api/v2/pokemon
-          # COVERALLS_REPO_TOKEN: your_token_here
+          COVERALLS_REPO_TOKEN: qZrdUAlzI2SVRRuraQW35uKpj87H3V29D
       # Secondary Database container
       - image: cimg/postgres:15.0
         environment:
@@ -45,10 +45,17 @@ jobs:
 
       # Run tests
       - run:
-          name: Run tests
+          name: Run tests with coverage
           command: |
             cd backend
-            pytest -v
+            pytest --cov=. -v
+
+      # 2. Enviar a Coveralls usando la CLI de Python
+      - run:
+          name: Upload coverage to Coveralls
+          command: |
+            cd backend
+            coveralls
 
       - persist_to_workspace:
           root: ~/project
