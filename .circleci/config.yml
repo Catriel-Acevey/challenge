@@ -55,18 +55,12 @@ jobs:
           name: Upload coverage to Coveralls
           command: |
             cd backend
-            coveralls
+            python -m coveralls
 
       - persist_to_workspace:
           root: ~/project
           paths:
             - .
-
-      # Coveralls step commented out
-      # - coveralls/upload:
-      #     parallel: true
-      #     flag_name: Test 1
-      #     verbose: true
 
 workflows:
   build_test_deploy:
