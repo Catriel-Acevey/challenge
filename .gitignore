@@ -19,6 +19,9 @@ ENV/
 .vscode/
 .idea/
 
+#coverage
+.coverage
+
 # Base de datos local (por si usás SQLite o archivos de BD locales)
 *.sqlite3
 *.db
