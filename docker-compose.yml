@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Base de Datos
+  # Database
   db:
     image: postgres:15-alpine
     container_name: challenge_postgres
@@ -33,7 +33,7 @@ services:
       - POSTGRES_DB=challenge_db
       - POKEAPI_BASE_URL=https://pokeapi.co/api/v2/pokemon
 
-  # Futuro servicio de Frontend (opcional a futuro)
+  # Future frontend service (optional)
   # frontend:
   #   build: ./frontend
   #   ports:

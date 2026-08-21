@@ -1,31 +1,31 @@
-# Python bytecode (archivos compilados)
+# Python bytecode (compiled files)
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Entornos virtuales
+# Virtual environments
 venv/
 .venv/
 env/
 ENV/
 
-# Variables de entorno (¡NUNCA subir contraseñas/secrets!)
+# Environment variables (NEVER commit passwords or secrets!)
 .env
 .env.test
 *.env
 
-# Carpetas de IDEs/Editores
+# IDE/editor directories
 .vscode/
 .idea/
 
 #coverage
 .coverage
 
-# Base de datos local (por si usás SQLite o archivos de BD locales)
+# Local database files (for SQLite or other local database files)
 *.sqlite3
 *.db
 
-# Archivos del sistema operativo
+# Operating system files
 .DS_Store
 Thumbs.db

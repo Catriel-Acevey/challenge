@@ -21,7 +21,7 @@ if not settings.POSTGRES_DB.endswith("_test"):
         f"Execution canceled to protect your development data.\n"
     )
 
-# 2. Si la DB de test no existe en el contenedor, Python la crea sola
+# 2. If the test database does not exist in the container, Python creates it.
 if not database_exists(settings.DATABASE_URL):
     create_database(settings.DATABASE_URL)
 
@@ -31,32 +31,14 @@ TestingSessionLocal = sessionmaker(
 )
 
 
-# 3. Fixture de Base de Datos
-# @pytest.fixture(scope="module")
-# def db():
-#     # Crea las tablas en challenge_db_test
-#     Base.metadata.create_all(bind=engine)
-
-#     connection = engine.connect()
-#     transaction = connection.begin()
-#     session = TestingSessionLocal(bind=connection)
-
-#     yield session  # Entrega la sesión a los tests
-
-#     session.close()
-#     transaction.rollback()
-#     connection.close()
-#     # Limpia las tablas al terminar la suite de tests
-#     Base.metadata.drop_all(bind=engine)
-
-# 1. Las tablas se crean UNA sola vez para toda la ejecución de pytest
+# 1. Create the tables once for the entire pytest run.
 @pytest.fixture(scope="session")
 def setup_db():
     Base.metadata.create_all(bind=engine)
     yield
     Base.metadata.drop_all(bind=engine)
 
-# 2. Cada test abre una transacción y hace rollback al terminar (vacío instantáneo)
+# 2. Each test opens a transaction and rolls it back when it finishes.
 @pytest.fixture(scope="function")
 def db(setup_db):
     connection = engine.connect()
@@ -66,11 +48,11 @@ def db(setup_db):
     yield session
 
     session.close()
-    transaction.rollback() # 👈 Desecha todo lo creado en el test sin tocar la estructura
+    transaction.rollback()  # Discard test data without changing the schema.
     connection.close()
 
 
-# 4. Fixture del Cliente HTTP (Acá se define 'client')
+# 4. HTTP client fixture.
 @pytest.fixture(scope="function")
 def client(db):
     def _override_get_db():
@@ -79,7 +61,7 @@ def client(db):
         finally:
             pass
 
-    # Interceptamos get_db para que use la DB de prueba en FastAPI
+    # Override get_db so FastAPI uses the test database.
     app.dependency_overrides[get_db] = _override_get_db
     with TestClient(app) as c:
         yield c
@@ -89,8 +71,8 @@ def client(db):
 def mock_pokeapi(mocker):
     fake_client = FakePokeAPIClient()
     
-    # Reemplaza la instancia real importada en tu service
-    # (Asegurate de ajustar la ruta al módulo exacto donde importás poke_api_client)
+    # Replace the real instance imported by the service.
+    # Adjust the path if the client is imported from another module.
     mocker.patch("app.services.user_service.poke_api_client", fake_client)
     
     return fake_client

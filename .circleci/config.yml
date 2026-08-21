@@ -50,7 +50,7 @@ jobs:
             cd backend
             pytest --cov=. -v
 
-      # 2. Enviar a Coveralls usando la CLI de Python
+      # 2. Upload coverage to Coveralls using the Python CLI.
       - run:
           name: Upload coverage to Coveralls
           command: |

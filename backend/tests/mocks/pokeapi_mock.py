@@ -4,12 +4,12 @@ import httpx
 
 class FakePokeAPIClient:
     """
-    Cliente de pruebas que imita la interfaz de PokeAPIClient
-    sin realizar peticiones HTTP reales.
+    Test client that mirrors the PokeAPIClient interface
+    without making real HTTP requests.
     """
 
     def __init__(self, pokemon_db: Optional[dict[int, str]] = None):
-        # Mapeo por defecto ID -> Nombre
+        # Default ID-to-name mapping.
         self._db = pokemon_db or {
             1: "bulbasaur",
             4: "charmander",

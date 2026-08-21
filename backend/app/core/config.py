@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Mi API Backend"
+    PROJECT_NAME: str = "My Backend API"
     
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     @property
     def DATABASE_URL(self) -> str:
         """
-        Genera la URL de conexión para SQLAlchemy
+        Generate the SQLAlchemy connection URL.
         """
         return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
