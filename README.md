@@ -54,6 +54,16 @@ Docker, the backend connects to the `db` service through its internal port
 `5432`; port `5433` is exposed on the host. The local `backend/.env` file is not
 required when using the Compose scripts.
 
+## Migrations
+
+Migrations are configured with Alembic. To run them from an environment with
+the dependencies and environment variables configured:
+
+```bash
+cd backend
+alembic upgrade head
+```
+
 ## Run the application
 
 ```bash
@@ -109,25 +119,12 @@ After the tests finish, clean up the test containers with:
 docker compose -f docker-compose.test.yml down -v
 ```
 
-## Migrations
+## Decisions Made
 
-Migrations are configured with Alembic. To run them from an environment with
-the dependencies and environment variables configured:
-
-```bash
-cd backend
-alembic upgrade head
-```
-
-## Stack
-
-- Python 3.14
-- FastAPI 0.140
-- SQLAlchemy 2
-- PostgreSQL 15
-- Alembic
-- Pytest
-- Docker Compose
+* **Clean Architecture:** Implemented to maintain a clear separation of concerns, ensuring high maintainability, testability, and flexibility for future feature changes or integrations.
+* **SQLAlchemy & Pydantic:** Chosen as the ORM and data validation layer due to their seamless integration with FastAPI. They provide strong type safety, efficient database management, and fast execution.
+* **Docker & Docker Compose:** Used to containerize the application and database, guaranteeing a consistent, portable, and reliable development and production environment.
+* **Pytest & Coverage:** Pytest is the industry-standard testing framework for Python, offering simple syntax and high performance. Includes automated unit and integration testing with `pytest-cov` to ensure code reliability across builds.
 
 ## Areas for improvement
 
@@ -140,14 +137,12 @@ alembic upgrade head
 - Add authentication and password hashing before using the service in
 	production.
 
-## Decisions Made
+## Stack
 
-* **Clean Architecture:** Implemented to maintain a clear separation of concerns, ensuring high maintainability, testability, and flexibility for future feature changes or integrations.
-* **SQLAlchemy & Pydantic:** Chosen as the ORM and data validation layer due to their seamless integration with FastAPI. They provide strong type safety, efficient database management, and fast execution.
-* **Docker & Docker Compose:** Used to containerize the application and database, guaranteeing a consistent, portable, and reliable development and production environment.
-* **Pytest & Coverage:** Pytest is the industry-standard testing framework for Python, offering simple syntax and high performance. Includes automated unit and integration testing with `pytest-cov` to ensure code reliability across builds.
-
-## Routes & Documentation
-
-* **Local API Documentation (Swagger):** [http://localhost:8000/docs](http://localhost:8000/docs)
-* **Alternative API Documentation (ReDoc):** [http://localhost:8000/redoc](http://localhost:8000/redoc)
+- Python 3.14
+- FastAPI 0.140
+- SQLAlchemy 2
+- PostgreSQL 15
+- Alembic
+- Pytest
+- Docker Compose
