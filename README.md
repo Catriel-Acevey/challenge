@@ -1,12 +1,16 @@
-# Backend Challenge
+# Challenge
 
 REST microservice for managing users and their Pokemon teams. The API is built
 with FastAPI, PostgreSQL, and SQLAlchemy, and queries PokeAPI to convert stored
 Pokemon IDs into their names.
 
-## Deployed App Running on HEROKU
+## 🚀 Production Deployment
 
-- [SWAGGER](https://blooming-garden-01349-26f398f01a3b.herokuapp.com/api)
+The backend is deployed on **Render** with a **Supabase** (PostgreSQL) managed database.
+
+* **Live API Base URL:** `https://challenge-pjym.onrender.com`
+* **Swagger UI Docs:** [https://challenge-pjym.onrender.com/docs](https://challenge-pjym.onrender.com/docs)
+* **ReDoc:** [https://challenge-pjym.onrender.com/redoc](https://challenge-pjym.onrender.com/redoc)
 
 ### Badges
 
