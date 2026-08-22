@@ -9,8 +9,8 @@ Pokemon IDs into their names.
 The backend is deployed on **Render** with a **Supabase** (PostgreSQL) managed database.
 
 * **Live API Base URL:** `https://challenge-pjym.onrender.com`
-* **Swagger UI Docs:** [https://challenge-pjym.onrender.com/docs](https://challenge-pjym.onrender.com/docs)
-* **ReDoc:** [https://challenge-pjym.onrender.com/redoc](https://challenge-pjym.onrender.com/redoc)
+* [**Swagger UI Docs**](https://challenge-pjym.onrender.com/docs)
+* [**ReDoc**](https://challenge-pjym.onrender.com/redoc)
 
 ### Badges
 
