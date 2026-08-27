@@ -16,7 +16,7 @@ class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     username: Optional[str] = None
     pokemon_team: Optional[List[int]] = None
-    password: Optional[str] = None
+    hashed_password: Optional[str] = None
 
 # Schema for returning user data (Output)
 class UserResponse(UserBase):
@@ -25,3 +25,22 @@ class UserResponse(UserBase):
     pokemon_team: List[str] = []
 
     model_config = ConfigDict(from_attributes=True)
+    
+# Schema for returning the JWT access token
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+# Schema for decoding token payload internally
+class TokenPayload(BaseModel):
+    sub: Optional[str] = None
+
+# Schema for returning user data along with the JWT token
+class AuthResponse(BaseModel):
+    user: UserResponse
+    token: Token
+    
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str

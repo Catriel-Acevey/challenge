@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from app.models.user import User
-from app.schemas.user import UserCreate, UserUpdate
+from app.schemas.user import UserUpdate
 
 
 class UserRepository:
@@ -18,14 +18,9 @@ class UserRepository:
         """Retrieve a list of users with pagination parameters."""
         return db.query(User).offset(skip).limit(limit).all()
 
-    def create(self, db: Session, user_data: UserCreate) -> User:
+    def create(self, db: Session, user_data: dict) -> User:
         """Create and persist a new user in the database."""
-        db_user = User(
-            email=user_data.email,
-            username=user_data.username,
-            password=user_data.password,
-            pokemon_team=user_data.pokemon_team
-        )
+        db_user = User(**user_data)
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
