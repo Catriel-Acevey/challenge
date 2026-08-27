@@ -66,6 +66,19 @@ def client(db):
     with TestClient(app) as c:
         yield c
     app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def auth_headers(client):
+    payload = {
+        "email": "auth_user@example.com",
+        "username": "authuser",
+        "password": "securepassword123",
+    }
+    response = client.post("/api/v1/auth/register", json=payload)
+    assert response.status_code == 201
+    token = response.json()["token"]["access_token"]
+    return {"Authorization": f"Bearer {token}"}
     
 @pytest.fixture(autouse=True)
 def mock_pokeapi(mocker):
