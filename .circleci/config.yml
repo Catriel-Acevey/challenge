@@ -16,6 +16,9 @@ jobs:
           POSTGRES_PASSWORD: postgrespassword
           POSTGRES_DB: challenge_db_test
           POKEAPI_BASE_URL: https://pokeapi.co/api/v2/pokemon
+          SECRET_KEY: circleci-test-only-secret-key-32chars
+          ACCESS_TOKEN_EXPIRE_MINUTES: 30
+          ALGORITHM: HS256
           COVERALLS_REPO_TOKEN: qZrdUAlzI2SVRRuraQW35uKpj87H3V29D
       # Secondary Database container
       - image: cimg/postgres:15.0

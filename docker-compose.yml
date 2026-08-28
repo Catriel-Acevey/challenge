@@ -32,6 +32,9 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_DB=challenge_db
       - POKEAPI_BASE_URL=https://pokeapi.co/api/v2/pokemon
+        - SECRET_KEY=docker-dev-only-secret-key-32chars
+        - ACCESS_TOKEN_EXPIRE_MINUTES=30
+        - ALGORITHM=HS256
 
   # Future frontend service (optional)
   # frontend:
