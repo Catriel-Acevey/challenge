@@ -16,7 +16,7 @@ class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     username: Optional[str] = None
     pokemon_team: Optional[List[int]] = None
-    hashed_password: Optional[str] = None
+    password: Optional[str] = None
 
 # Schema for returning user data (Output)
 class UserResponse(UserBase):

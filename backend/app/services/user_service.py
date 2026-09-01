@@ -186,7 +186,16 @@ class UserService:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="User not found"
             )
-        user = self.user_repo.update(db=db, db_user=db_user, user_data=user_in)
+
+        update_data = user_in.model_dump(exclude_unset=True)
+
+        if "password" in update_data and update_data["password"]:
+            update_data["hashed_password"] = security.get_password_hash(
+                update_data["password"]
+            )
+            del update_data["password"]
+
+        user = self.user_repo.update(db=db, db_user=db_user, user_data=update_data)
         enriched_pokemon_names = await self.poke_client.get_pokemon_names_by_ids(
             user.pokemon_team or []
         )

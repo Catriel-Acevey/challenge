@@ -26,13 +26,9 @@ class UserRepository:
         db.refresh(db_user)
         return db_user
 
-    def update(self, db: Session, db_user: User, user_data: UserUpdate) -> User:
+    def update(self, db: Session, db_user: User, user_data: dict) -> User:
         """Update an existing user's details."""
-        update_data = user_data.model_dump(exclude_unset=True)
-        
-        print(f"updating user: {update_data.items()}")
-
-        for key, value in update_data.items():
+        for key, value in user_data.items():
             setattr(db_user, key, value)
 
         db.add(db_user)
