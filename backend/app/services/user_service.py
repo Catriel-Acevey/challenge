@@ -1,61 +1,59 @@
-from typing import List
-from fastapi import HTTPException, status
-from sqlalchemy.orm import Session
 from datetime import timedelta
-import jwt
-from pydantic import ValidationError
+from typing import List
 
-from app.models.user import User
-from app.repositories.user_repository import UserRepository
-from app.schemas.user import UserCreate, UserUpdate, UserResponse
+import jwt
+from fastapi import HTTPException, status
+from pydantic import ValidationError
+from sqlalchemy.orm import Session
+
 from app.clients.pokeapi import PokeAPIClient, poke_api_client
 from app.core import security
 from app.core.config import settings
+from app.models.user import User
+from app.repositories.user_repository import UserRepository
+from app.schemas.user import UserCreate, UserResponse, UserUpdate
 
 
 class UserService:
     def __init__(self, user_repository: UserRepository, poke_client: PokeAPIClient):
         self.user_repo = user_repository
         self.poke_client = poke_client
-        
+
     async def register_user(self, db: Session, user_in: UserCreate) -> dict:
-            """Check business rules and delegate creation to repository."""
-    
-            if self.user_repo.get_by_email(db, email=user_in.email):
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="The user with this email already exists in the system.",
-                )
-    
-            hashed_password = security.get_password_hash(user_in.password)
-            user_data = {
-                "email": user_in.email,
-                "username": user_in.username,
-                "hashed_password": hashed_password,
-                "pokemon_team": user_in.pokemon_team or [],
-            }
-            user = self.user_repo.create(db, user_data=user_data)
-            
-            access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-            access_token = security.create_access_token(
-                data={"sub": user.email}, expires_delta=access_token_expires
+        """Check business rules and delegate creation to repository."""
+
+        if self.user_repo.get_by_email(db, email=user_in.email):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="The user with this email already exists in the system.",
             )
-            pokemon_names = await self.poke_client.get_pokemon_names_by_ids(
-                user.pokemon_team or []
-            )
-            return {
-                "user": UserResponse(
-                    id=user.id,
-                    email=user.email,
-                    username=user.username,
-                    is_active=user.is_active,
-                    pokemon_team=pokemon_names or [],
-                ),
-                "token": {
-                    "access_token": access_token,
-                    "token_type": "bearer"
-                }
-            }
+
+        hashed_password = security.get_password_hash(user_in.password)
+        user_data = {
+            "email": user_in.email,
+            "username": user_in.username,
+            "hashed_password": hashed_password,
+            "pokemon_team": user_in.pokemon_team or [],
+        }
+        user = self.user_repo.create(db, user_data=user_data)
+
+        access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = security.create_access_token(
+            data={"sub": user.email}, expires_delta=access_token_expires
+        )
+        pokemon_names = await self.poke_client.get_pokemon_names_by_ids(
+            user.pokemon_team or []
+        )
+        return {
+            "user": UserResponse(
+                id=user.id,
+                email=user.email,
+                username=user.username,
+                is_active=user.is_active,
+                pokemon_team=pokemon_names or [],
+            ),
+            "token": {"access_token": access_token, "token_type": "bearer"},
+        }
 
     async def create_user(self, db: Session, user_in: UserCreate) -> dict:
         """Check business rules and delegate creation to repository."""
@@ -85,7 +83,7 @@ class UserService:
             is_active=user.is_active,
             pokemon_team=pokemon_names or [],
         )
-        
+
     def login_user(self, db: Session, email: str, password: str) -> dict:
         """Authenticate user credentials and return access token."""
         # 1. Fetch user
@@ -110,7 +108,9 @@ class UserService:
         )
         return {"access_token": access_token, "token_type": "bearer"}
 
-    async def get_users(self, db: Session, skip: int = 0, limit: int = 100) -> List[User]:
+    async def get_users(
+        self, db: Session, skip: int = 0, limit: int = 100
+    ) -> List[User]:
         """Retrieves all users with pagination."""
         users = self.user_repo.get_all(db=db, skip=skip, limit=limit)
         enriched_users = []
@@ -124,7 +124,7 @@ class UserService:
                     email=user.email,
                     username=user.username,
                     is_active=user.is_active,
-                    pokemon_team=pokemon_names or []
+                    pokemon_team=pokemon_names or [],
                 )
             )
         return enriched_users
@@ -135,7 +135,7 @@ class UserService:
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"User with ID {user_id} not found."
+                detail=f"User with ID {user_id} not found.",
             )
         pokemon_names = await self.poke_client.get_pokemon_names_by_ids(
             user.pokemon_team or []
@@ -145,7 +145,15 @@ class UserService:
             email=user.email,
             username=user.username,
             is_active=user.is_active,
-            pokemon_team=pokemon_names or []
+            pokemon_team=pokemon_names or [],
+        )
+
+    @staticmethod
+    def _credentials_exception():
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
         )
 
     async def get_user_from_token(self, db: Session, token: str) -> User:
@@ -165,17 +173,17 @@ class UserService:
             raise HTTPException(status_code=404, detail="User not found")
         if not user.is_active:
             raise HTTPException(status_code=400, detail="Inactive user")
-        
+
         pokemon_names = await self.poke_client.get_pokemon_names_by_ids(
             user.pokemon_team or []
-            )
+        )
 
         return UserResponse(
             id=user.id,
             email=user.email,
             username=user.username,
             is_active=user.is_active,
-            pokemon_team=pokemon_names or []
+            pokemon_team=pokemon_names or [],
         )
 
     async def update_user(self, db: Session, user_id: int, user_in: UserUpdate) -> User:
@@ -183,8 +191,7 @@ class UserService:
         db_user = self.user_repo.get_by_id(db=db, user_id=user_id)
         if not db_user:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             )
 
         update_data = user_in.model_dump(exclude_unset=True)
@@ -213,7 +220,7 @@ class UserService:
         if not db_user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"User with ID {user_id} not found."
+                detail=f"User with ID {user_id} not found.",
             )
         self.user_repo.delete(db=db, db_user=db_user)
 
