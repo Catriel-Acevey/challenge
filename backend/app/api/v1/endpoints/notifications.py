@@ -39,25 +39,26 @@ def create_notification(
             detail=str(e),
         )
 
-    # 2. Determine initial status based on strategy result
-    initial_status = NotificationStatus.SENT if is_sent else NotificationStatus.FAILED
-
-    # 3. Persist notification in database
-    db_notification = Notification(
-        **notification_in.model_dump(),
-        user_id=current_user.id,
-        status=initial_status,
-    )
-    db.add(db_notification)
-    db.commit()
-    db.refresh(db_notification)
-
-    # Throw 400 if validation/delivery failed in strategy
+    # 2. Throw 400 if validation/delivery failed in strategy (before persisting)
     if not is_sent:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Failed to send notification via {notification_in.channel.value}. Check logs/recipient format.",
         )
+
+    # 3. Persist notification in database
+    initial_status = NotificationStatus.SENT
+    db_notification = Notification(
+        title=notification_in.title,
+        content=notification_in.content,
+        channel=notification_in.channel.value,
+        recipient=notification_in.recipient,
+        user_id=current_user.id,
+        status=initial_status.value,
+    )
+    db.add(db_notification)
+    db.commit()
+    db.refresh(db_notification)
 
     return db_notification
 

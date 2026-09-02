@@ -27,10 +27,21 @@ class Notification(Base):
 
     title = Column(String(255), nullable=False)
     content = Column(Text, nullable=False)
-    channel = Column(Enum(NotificationChannel), nullable=False)
+    channel = Column(
+        Enum(
+            NotificationChannel,
+            values_callable=lambda obj: [e.value for e in obj],
+        ),
+        nullable=False,
+    )
     recipient = Column(String(255), nullable=False)
     status = Column(
-        Enum(NotificationStatus), default=NotificationStatus.PENDING, nullable=False
+        Enum(
+            NotificationStatus,
+            values_callable=lambda obj: [e.value for e in obj],
+        ),
+        default=NotificationStatus.PENDING,
+        nullable=False,
     )
 
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
