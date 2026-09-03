@@ -36,11 +36,18 @@ services:
         - ACCESS_TOKEN_EXPIRE_MINUTES=30
         - ALGORITHM=HS256
 
-  # Future frontend service (optional)
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "3000:3000"
+  # Frontend (SPA served by Nginx)
+  frontend:
+    container_name: challenge_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:8000/api/v1
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:
