@@ -7,8 +7,9 @@ notification management with JWT authentication.
 
 ## 🚀 Production Deployment
 
-The backend is deployed on **Render** with a **Supabase** (PostgreSQL) managed database.
+The application is deployed in production with the frontend hosted on **Firebase Hosting** and the backend hosted on **Render** connected to a **Supabase** (PostgreSQL) managed database.
 
+* **Frontend App:** [https://challenge-notifications.web.app](https://challenge-notifications.web.app)
 * **Live API Base URL:** `https://challenge-pjym.onrender.com`
 * [**Swagger UI Docs**](https://challenge-pjym.onrender.com/docs)
 * [**ReDoc**](https://challenge-pjym.onrender.com/redoc)
