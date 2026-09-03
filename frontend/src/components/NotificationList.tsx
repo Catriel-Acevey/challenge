@@ -121,11 +121,13 @@ export function NotificationList() {
         </div>
       )}
 
-      <NotificationEditModal
-        notification={editingNotification!}
-        isOpen={!!editingNotification}
-        onClose={() => setEditingNotification(null)}
-      />
+      {editingNotification && (
+        <NotificationEditModal
+          notification={editingNotification}
+          isOpen={true}
+          onClose={() => setEditingNotification(null)}
+        />
+      )}
     </div>
   );
 }

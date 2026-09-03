@@ -3,34 +3,37 @@ import { useUpdateNotification } from '../hooks/useNotifications';
 import type { Notification, ChannelType } from '../types/api';
 
 interface Props {
-  notification: Notification;
+  notification: Notification | null;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export function NotificationEditModal({ notification, isOpen, onClose }: Props) {
   const updateNotification = useUpdateNotification();
-  const [title, setTitle] = useState(notification.title);
-  const [content, setContent] = useState(notification.content);
-  const [recipient, setRecipient] = useState(notification.recipient);
-  const [channel, setChannel] = useState<ChannelType>(notification.channel);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [recipient, setRecipient] = useState('');
+  const [channel, setChannel] = useState<ChannelType>('email');
 
   useEffect(() => {
-    setTitle(notification.title);
-    setContent(notification.content);
-    setRecipient(notification.recipient);
-    setChannel(notification.channel);
+    if (notification) {
+      setTitle(notification.title);
+      setContent(notification.content);
+      setRecipient(notification.recipient);
+      setChannel(notification.channel);
+    }
   }, [notification]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!notification) return;
     updateNotification.mutate(
       { id: notification.id, data: { title, content } },
       { onSuccess: onClose }
     );
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !notification) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
