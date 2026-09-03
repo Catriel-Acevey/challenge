@@ -32,19 +32,19 @@ export function NotificationList() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors">
       {/* Header */}
-      <div className="p-6 border-b border-gray-100">
+      <div className="p-6 border-b border-gray-100 dark:border-gray-700">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <h3 className="text-lg font-bold text-gray-900">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white">
             📋 Mis Notificaciones
-            <span className="ml-2 text-sm font-normal text-gray-500">({filtered.length})</span>
+            <span className="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400">({filtered.length})</span>
           </h3>
 
           <select
             value={filterChannel}
             onChange={(e) => setFilterChannel(e.target.value as ChannelType | 'all')}
-            className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            className="px-3 py-1.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
           >
             <option value="all">Todos los canales</option>
             <option value="email">📧 Email</option>
@@ -62,16 +62,16 @@ export function NotificationList() {
           <p className="text-sm mt-1">Crea tu primera notificación usando el formulario.</p>
         </div>
       ) : (
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-gray-100 dark:divide-gray-700">
           {filtered.map((item) => {
             const status = statusStyles[item.status];
             return (
-              <div key={item.id} className="p-4 hover:bg-gray-50 transition">
+              <div key={item.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-lg">{channelIcons[item.channel]}</span>
-                      <h4 className="font-semibold text-gray-900 truncate">{item.title}</h4>
+                      <h4 className="font-semibold text-gray-900 dark:text-white truncate">{item.title}</h4>
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.text}`}
                       >
