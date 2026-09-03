@@ -56,39 +56,6 @@ The application is deployed in production with the frontend hosted on **Firebase
 - Available ports `3000` (frontend), `8000` (backend), and `5433` (database).
 - Internet access to query PokeAPI during normal API usage.
 
-## Project Structure
-
-```
-├── backend/                 # FastAPI backend
-│   ├── app/
-│   │   ├── api/v1/          # API routes (auth, users, notifications)
-│   │   ├── clients/         # External API clients (PokeAPI)
-│   │   ├── core/            # Config, security, settings
-│   │   ├── db/              # Database session and base
-│   │   ├── models/          # SQLAlchemy models
-│   │   ├── notifications/   # Notification strategy pattern
-│   │   ├── repositories/    # Data access layer
-│   │   ├── schemas/         # Pydantic schemas
-│   │   └── services/        # Business logic
-│   ├── alembic/             # Database migrations
-│   ├── tests/               # Pytest test suite
-│   └── Dockerfile
-├── frontend/                # React SPA
-│   ├── src/
-│   │   ├── components/      # UI components (Navbar, NotificationForm, NotificationList)
-│   │   ├── context/         # React contexts (AuthContext, ThemeContext)
-│   │   ├── hooks/           # Custom hooks (useNotifications)
-│   │   ├── pages/           # Page components (LoginPage, DashboardPage)
-│   │   ├── services/        # Axios API client
-│   │   ├── types/           # TypeScript interfaces
-│   │   └── assets/          # Static assets
-│   ├── nginx.conf           # Nginx config for production
-│   ├── Dockerfile           # Multi-stage build (Node → Nginx)
-│   └── .env.example         # Environment variables documentation
-├── docker-compose.yml       # Development services (db, backend, frontend)
-└── docker-compose.test.yml  # Test environment
-```
-
 ## Configuration
 
 The application reads environment variables through Pydantic Settings. The
@@ -230,6 +197,39 @@ docker compose -f docker-compose.test.yml down -v
 - Add notifications pagination and infinite scroll.
 - Add notification read/unread status tracking.
 - Add WebSocket support for real-time notification updates.
+
+## Project Structure
+
+```
+├── backend/                 # FastAPI backend
+│   ├── app/
+│   │   ├── api/v1/          # API routes (auth, users, notifications)
+│   │   ├── clients/         # External API clients (PokeAPI)
+│   │   ├── core/            # Config, security, settings
+│   │   ├── db/              # Database session and base
+│   │   ├── models/          # SQLAlchemy models
+│   │   ├── notifications/   # Notification strategy pattern
+│   │   ├── repositories/    # Data access layer
+│   │   ├── schemas/         # Pydantic schemas
+│   │   └── services/        # Business logic
+│   ├── alembic/             # Database migrations
+│   ├── tests/               # Pytest test suite
+│   └── Dockerfile
+├── frontend/                # React SPA
+│   ├── src/
+│   │   ├── components/      # UI components (Navbar, NotificationForm, NotificationList)
+│   │   ├── context/         # React contexts (AuthContext, ThemeContext)
+│   │   ├── hooks/           # Custom hooks (useNotifications)
+│   │   ├── pages/           # Page components (LoginPage, DashboardPage)
+│   │   ├── services/        # Axios API client
+│   │   ├── types/           # TypeScript interfaces
+│   │   └── assets/          # Static assets
+│   ├── nginx.conf           # Nginx config for production
+│   ├── Dockerfile           # Multi-stage build (Node → Nginx)
+│   └── .env.example         # Environment variables documentation
+├── docker-compose.yml       # Development services (db, backend, frontend)
+└── docker-compose.test.yml  # Test environment
+```
 
 ## Stack
 
