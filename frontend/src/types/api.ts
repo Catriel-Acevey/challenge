@@ -24,8 +24,7 @@ export interface TokenResponse {
 
 export interface AuthResponse {
   user: User;
-  access_token: string;
-  token_type: string;
+  token: TokenResponse;
 }
 
 // ─── Notification Types ──────────────────────────────────────────────────────

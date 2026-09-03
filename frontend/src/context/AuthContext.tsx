@@ -8,6 +8,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  register: (email: string, username: string, password: string, pokemon_team?: number[]) => Promise<void>;
   logout: () => void;
 }
 
@@ -41,6 +42,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(me);
   };
 
+  const register = async (email: string, username: string, password: string, pokemon_team?: number[]) => {
+    const data = await authApi.register({ email, username, password, pokemon_team });
+    localStorage.setItem('access_token', data.token.access_token);
+    setToken(data.token.access_token);
+    setUser(data.user);
+  };
+
   const logout = () => {
     localStorage.removeItem('access_token');
     setToken(null);
@@ -55,6 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthenticated: !!token && !!user,
         isLoading,
         login,
+        register,
         logout,
       }}
     >

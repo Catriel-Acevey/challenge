@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import type {
   LoginRequest,
   TokenResponse,
+  AuthResponse,
   User,
   Notification,
   NotificationCreateInput,
@@ -76,6 +77,11 @@ export const authApi = {
     const response = await api.post<TokenResponse>('/auth/login', formData, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
+    return response.data;
+  },
+
+  register: async (data: { email: string; username: string; password: string; pokemon_team?: number[] }): Promise<AuthResponse> => {
+    const response = await api.post<AuthResponse>('/auth/register', data);
     return response.data;
   },
 
